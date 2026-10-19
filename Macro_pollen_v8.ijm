@@ -1,4 +1,4 @@
-//Macro_pollen used to classify pollen grain meiosis
+//Macro_pollen used to classify pollen grain mitosis
 //Starts with an open hyperstack of z & time images
 //@2026 J. Brocard (PLATIM) for A. Calhau & T. Widiez (RDP)
 
@@ -11,7 +11,7 @@ t=getImageName(getTitle());
 rename(t);
 version="_v8";
 
-//---Ask the user for the directory with the present macro
+//---Ask the user for the directory containing with the present macro
 //---Note = stacks to analyze must be present in the same directory as the macro
 dirmac=getDirectory("Macro Directory?");
 //dirmac="C:/DATA JAC/Users/Andrea Calhau/Macro pollen";
@@ -33,7 +33,7 @@ dirim=dirmac+ substring(dirim,deb,fin)+"/";
 print(dirim);
 print("Interval = "+interval+" min");
 
-//---Collect the genotype of studies pollens
+//---Collect the genotype of studied pollens
 tot=substring(dirim,lengthOf(dirmac));
 date=substring(tot,0,7);
 vs=1;
@@ -59,7 +59,7 @@ if (bool1) cat=dir1+"/";
 if (bool2) cat=dir2+"/";
 //print(dirim+cat);
 
-//---Check for or create a directory for each category of meiosis 
+//---Check for or create a directory for each category of mitosis 
 if (!File.exists(dirim+cat+"lagging"+version)) File.makeDirectory(dirim+cat+"lagging"+version);
 if (!File.exists(dirim+cat+"normal"+version)) File.makeDirectory(dirim+cat+"normal"+version);
 if (!File.exists(dirim+cat+"autres"+version)) File.makeDirectory(dirim+cat+"autres"+version);
@@ -73,7 +73,7 @@ setMinAndMax(100, 250);
 setTool("rectangle");
 waitForUser("Draw Square ROIs and click OK when finished");
 
-//---From each drawn ROI...
+//---From each drawn Roi...
 nROIs=roiManager("Count");
 if (nROIs>0) {
 	print("Type\t Name\t z-proj\t t-proj\t duration (min)");
@@ -81,7 +81,7 @@ if (nROIs>0) {
 	for (r=0;r<nROIs;r++){
 		roiManager("Select",r);
 		//...determine the category...
-		group=getMeiosisCategory();
+		group=getMitosisCategory();
 		//...and set the corresponding Roi group
 		Roi.setGroup(group); luno="";
 		if (group==0){ //catégorie = lagging
@@ -90,7 +90,7 @@ if (nROIs>0) {
 			run("Duplicate...", "title="+tit+" duplicate");
 			luno="lagging";
 			pos=newArray(4);
-			pos=getMeiosisTime(tit);
+			pos=getMitosisTime(tit);
 			print("Lagging\t"+tit+"\t"+pos[2]+"->"+pos[3]+"\t"+pos[0]+"->"+pos[1]+"\t"+(pos[1]-pos[0])*interval);
 		}
 		if (group==1){ //catégorie = autres
@@ -113,7 +113,7 @@ if (nROIs>0) {
 			run("Duplicate...", "title="+tit+" duplicate");
 			luno="normal";
 			pos=newArray(4);
-			pos=getMeiosisTime(tit);
+			pos=getMitosisTime(tit);
 			print("Normal\t"+tit+"\t"+pos[2]+"->"+pos[3]+"\t"+pos[0]+"->"+pos[1]+"\t"+(pos[1]-pos[0])*interval);
 		}
 		run("Properties...", "pixel_width="+pix_res+" pixel_height="+pix_res+"  voxel_depth=1 unit=micron");
@@ -127,7 +127,7 @@ saveAs("Text",dirim+substring(cat,0, lengthOf(cat)-1)+"_"+substring(t,0,lengthOf
 run("Close");
 roiManager("reset");
 
-function getMeiosisTime(t){
+function getMitosisTime(t){
 	selectWindow(t);
 	setSlice(1);
 	setTool("hand");
@@ -160,10 +160,10 @@ function getMeiosisTime(t){
 	return newArray(beg,end,begz,endz);
 }
 
-function getMeiosisCategory(){
+function getMitosisCategory(){
 	mixup=0;
 	while (mixup==0 || mixup>1){
-		Dialog.create("Meiosis Category");
+		Dialog.create("Mitosis Category");
 		Dialog.addCheckbox("lagging",true);
 		Dialog.addCheckbox("normal",false);
 		Dialog.addCheckbox("autre",false);
