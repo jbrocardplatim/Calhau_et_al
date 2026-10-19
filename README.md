@@ -1,2 +1,2 @@
 # Calhau_et_al
-ImageJ macro used for pollen meiosis classification from a z/time hyperstack
+ImageJ macro used for pollen mitosis classification from a z/time hyperstack
